@@ -9,53 +9,53 @@ namespace Shmapper
     public interface ISharepointClientAsync : IDisposable
     {
         /// <summary>
-        /// Get items of type <T> by lambda expression - filter
+        /// Get items of type <T> by lambda expression - filter asynchronously
         /// </summary>
-        Task<List<T>> Query<T>(Expression<Func<T, bool>> filter,CancellationToken token) where T : ISharepointItem, new();
+        Task<List<T>> QueryAsync<T>(Expression<Func<T, bool>> filter,CancellationToken token) where T : ISharepointItem, new();
 
         /// <summary>
-        /// Get items of type <T> by caml query string. Empty query returns all items.
+        /// Get items of type <T> by caml query string. Empty query returns all items asynchronously.
         /// </summary>
-        Task<List<T>> Query<T>(string camlQueryString, CancellationToken token) where T : ISharepointItem, new();
+        Task<List<T>> QueryAsync<T>(string camlQueryString, CancellationToken token) where T : ISharepointItem, new();
 
         /// <summary>
-        /// Get all items of type <T>.
+        /// Get all items of type <T> asynchronously.
         /// </summary>
-        Task<List<T>> GetAll<T>(CancellationToken token) where T : ISharepointItem, new();
+        Task<List<T>> GetAllAsync<T>(CancellationToken token) where T : ISharepointItem, new();
 
         /// <summary>
-        /// Get item by ID of type <T>.
+        /// Get item by ID of type <T> asynchronously.
         /// </summary>
-        Task<T> GetById<T>(int Id,CancellationToken token) where T : ISharepointItem, new();
+        Task<T> GetByIdAsync<T>(int Id,CancellationToken token) where T : ISharepointItem, new();
 
         /// <summary>
-        /// Update corresponding changed item in Sharepoint.
+        /// Update corresponding changed item in SharePoint asynchronously.
         /// </summary>
-        Task Update<T>(T Entity,CancellationToken token) where T : ISharepointItem;
+        Task UpdateAsync<T>(T Entity,CancellationToken token) where T : ISharepointItem;
 
         /// <summary>
-        /// Update corresponding items in Sharepoint.
+        /// Update corresponding items in SharePoint asynchronously.
         /// </summary>
-        Task Update<T>(IEnumerable<T> Entities,CancellationToken token) where T : ISharepointItem;
+        Task UpdateAsync<T>(IEnumerable<T> Entities,CancellationToken token) where T : ISharepointItem;
 
         /// <summary>
-        /// Remove corresponding item from Sharepoint.
+        /// Remove corresponding item from SharePoint asynchronously.
         /// </summary>
-        Task Delete<T>(T Entity,CancellationToken token) where T : ISharepointItem;
+        Task DeleteAsync<T>(T Entity,CancellationToken token) where T : ISharepointItem;
 
         /// <summary>
-        /// Remove corresponding items from Sharepoint.
+        /// Remove corresponding items from SharePoint asynchronously.
         /// </summary>
-        Task Delete<T>(IEnumerable<T> Entities,CancellationToken token) where T : ISharepointItem;
+        Task DeleteAsync<T>(IEnumerable<T> Entities,CancellationToken token) where T : ISharepointItem;
 
         /// <summary>
-        /// Create new item in Sharepoint.
+        /// Create new item in SharePoint asynchronously.
         /// </summary>
-        Task Insert<T>(T Entitiy,CancellationToken token) where T : ISharepointItem;
+        Task InsertAsync<T>(T Entitiy,CancellationToken token) where T : ISharepointItem;
 
         /// <summary>
-        /// Create new items in Sharepoint.
+        /// Create new items in SharePoint asynchronously.
         /// </summary>
-        Task Insert<T>(IEnumerable<T> Entity,CancellationToken token) where T : ISharepointItem;
+        Task InsertAsync<T>(IEnumerable<T> Entity,CancellationToken token) where T : ISharepointItem;
     }
 }
