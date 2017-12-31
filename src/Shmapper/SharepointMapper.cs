@@ -11,6 +11,17 @@ namespace Shmapper
     {
         private ClientContext Context;
 
+
+        /// <summary>
+        /// Returns Sharepoint List for item (via attribute SharepointList)
+        /// </summary>
+        public bool IsOverThresholdLimit<T>()
+        {
+            Type spEntityType = typeof(T);
+            var spAttr = spEntityType.GetCustomAttribute<SharepointListAttribute>();
+            return spAttr?.SpecialList == SpecialList.OverThresholdLimit;
+        }
+
         public SharepointMapper(ClientContext Context)
         {
             this.Context = Context;

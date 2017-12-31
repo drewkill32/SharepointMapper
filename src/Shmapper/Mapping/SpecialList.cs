@@ -3,6 +3,7 @@
     public enum SpecialList
     {
         None,
-        UserInfoList
+        UserInfoList,
+        OverThresholdLimit
     }
 }

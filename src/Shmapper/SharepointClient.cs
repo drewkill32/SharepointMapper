@@ -17,6 +17,7 @@ namespace Shmapper
     {
         private readonly ClientContext context;
         private readonly SharepointMapper mapper;
+        private const int MAX_ITEMS = 2000;
 
         public SharepointClient(string siteUrl,ICredentials credentials)
         {
@@ -85,9 +86,17 @@ namespace Shmapper
         {
             if (query.ViewXml == null)
             {
-                List<string> fieldsToLoad = mapper.GetMappedFields<T>();
-                query.ViewXml = Camlex.Query().ViewFields(fieldsToLoad).ToString(true);
+                var fieldsToLoad = mapper.GetMappedFields<T>();
+
+                var camlexQuery = Camlex.Query().ViewFields(fieldsToLoad);
+                var isOverThresholdLimit = mapper.IsOverThresholdLimit<T>();
+                if (isOverThresholdLimit)
+                {
+                    camlexQuery.Take(MAX_ITEMS);
+                }
+                query.ViewXml = camlexQuery.ToString(true);
             }
+            //TODO limit list if query parameters were passed
 
             var list = mapper.GetListForSharepointItem<T>();
             var items = list.GetItems(query);
@@ -95,10 +104,6 @@ namespace Shmapper
             return items;
         }
 
-        private void OnExecute(Action action)
-        {
-           
-        }
 
 
         /// <summary>
