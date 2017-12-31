@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Threading.Tasks;
 
 // TODO: check mapping method
 // TODO: exception handling ?
@@ -12,7 +13,7 @@ using System.Net;
 
 namespace Shmapper
 {
-    public class SharepointClient:IDisposable
+    public partial class SharepointClient: ISharepointClient
     {
         private readonly ClientContext context;
         private readonly SharepointMapper mapper;
@@ -23,6 +24,7 @@ namespace Shmapper
             {
                 throw new ArgumentNullException(nameof(siteUrl));
             }
+
             context = new ClientContext(siteUrl) {Credentials = credentials};
             mapper = new SharepointMapper(context);
         }
@@ -59,23 +61,45 @@ namespace Shmapper
 
         private List<T> Query<T>(CamlQuery query) where T : ISharepointItem, new()
         {
+            ListItemCollection items = LoadListItems<T>(query);
+
+
+            context.ExecuteQuery();
+
+            List<T> result = MappListItems<T>(items);
+
+            return result;
+        }
+
+
+
+        private List<T> MappListItems<T>(ListItemCollection items) where T : ISharepointItem, new()
+        {
+            List<T> result = new List<T>();
+            foreach (ListItem item in items)
+                result.Add(mapper.BuildEntityFromItem<T>(item));
+            return result;
+        }
+
+        private ListItemCollection LoadListItems<T>(CamlQuery query) where T : ISharepointItem, new()
+        {
             if (query.ViewXml == null)
             {
-                List<string> FieldsToLoad = mapper.GetMappedFields<T>();
-                query.ViewXml = Camlex.Query().ViewFields(FieldsToLoad).ToString(true);
+                List<string> fieldsToLoad = mapper.GetMappedFields<T>();
+                query.ViewXml = Camlex.Query().ViewFields(fieldsToLoad).ToString(true);
             }
 
             var list = mapper.GetListForSharepointItem<T>();
             var items = list.GetItems(query);
             context.Load(items);
-            context.ExecuteQuery();
-
-            List<T> result = new List<T>();
-            foreach (ListItem item in items)
-                result.Add(mapper.BuildEntityFromItem<T>(item));
-
-            return result;
+            return items;
         }
+
+        private void OnExecute(Action action)
+        {
+           
+        }
+
 
         /// <summary>
         /// Get item by ID of type <T>.
