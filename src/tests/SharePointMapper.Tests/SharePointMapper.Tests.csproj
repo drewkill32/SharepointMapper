@@ -112,13 +112,13 @@
     <None Include="xunit.runner.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Shmapper\Shmapper.csproj">
+    <Analyzer Include="..\..\..\packages\xunit.analyzers.0.8.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shmapper\Shmapper.csproj">
       <Project>{d88248e3-b64a-47e7-9f19-ae53bcf6c839}</Project>
       <Name>Shmapper</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\..\..\packages\xunit.analyzers.0.8.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
