@@ -32,7 +32,6 @@
   <ItemGroup>
     <Reference Include="Camlex.Client, Version=2.2.0.0, Culture=neutral, PublicKeyToken=831792d54d5285b7, processorArchitecture=MSIL">
       <HintPath>..\packages\Camlex.Client.dll.2.2.0.0\lib\net20\Camlex.Client.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.SharePoint2013.Client.x86.15.0.4481.1504\lib\Microsoft.SharePoint.Client.dll</HintPath>
