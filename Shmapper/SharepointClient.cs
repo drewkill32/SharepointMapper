@@ -17,8 +17,12 @@ namespace Shmapper
         private readonly ClientContext context;
         private readonly SharepointMapper mapper;
 
-        public SharepointClient(string siteUrl, ICredentials credentials)
+        public SharepointClient(string siteUrl,ICredentials credentials)
         {
+            if (string.IsNullOrEmpty(siteUrl))
+            {
+                throw new ArgumentNullException(nameof(siteUrl));
+            }
             context = new ClientContext(siteUrl) {Credentials = credentials};
             mapper = new SharepointMapper(context);
         }
