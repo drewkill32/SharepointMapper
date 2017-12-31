@@ -1,10 +1,10 @@
-﻿using Microsoft.SharePoint.Client;
-using System;
+﻿using System;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.SharePoint.Client;
 
-namespace Shmapper
+namespace Shmapper.Extensions
 {
     public static class ClientContextExtensions
     {
