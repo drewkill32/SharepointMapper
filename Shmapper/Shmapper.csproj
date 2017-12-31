@@ -51,6 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientContextExtensions.cs" />
+    <Compile Include="ISharepointClientAsync.cs" />
+    <Compile Include="ISharepointClient.cs" />
     <Compile Include="Mapping\InvalidMappingExeption.cs" />
     <Compile Include="Mapping\SharepointListAttribute.cs" />
     <Compile Include="Mapping\SharepointFieldAttribute.cs" />

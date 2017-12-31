@@ -12,7 +12,7 @@ using System.Net;
 
 namespace Shmapper
 {
-    public class SharepointClient:IDisposable
+    public class SharepointClient: ISharepointClient
     {
         private readonly ClientContext context;
         private readonly SharepointMapper mapper;
