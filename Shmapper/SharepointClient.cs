@@ -12,16 +12,15 @@ using System.Net;
 
 namespace Shmapper
 {
-    public class SharepointClient
+    public class SharepointClient:IDisposable
     {
-        private ClientContext Context;
-        private SharepointMapper Mapper;
+        private readonly ClientContext context;
+        private readonly SharepointMapper mapper;
 
-        public SharepointClient(string SiteUrl, ICredentials Credentials)
+        public SharepointClient(string siteUrl, ICredentials credentials)
         {
-            Context = new ClientContext(SiteUrl);
-            Context.Credentials = Credentials;
-            Mapper = new SharepointMapper(Context);
+            context = new ClientContext(siteUrl) {Credentials = credentials};
+            mapper = new SharepointMapper(context);
         }
 
         /// <summary>
@@ -31,7 +30,7 @@ namespace Shmapper
         {
             var CamlexEpressionFilter = new ExpressionConverter().Visit(filter) as Expression<Func<ListItem, bool>>;
 
-            List<string> FieldsToLoad = Mapper.GetMappedFields<T>();
+            List<string> FieldsToLoad = mapper.GetMappedFields<T>();
             string spQuery = Camlex.Query().Where(CamlexEpressionFilter).ViewFields(FieldsToLoad).ToString(true);
             return Query<T>(spQuery);
         }
@@ -58,18 +57,18 @@ namespace Shmapper
         {
             if (query.ViewXml == null)
             {
-                List<string> FieldsToLoad = Mapper.GetMappedFields<T>();
+                List<string> FieldsToLoad = mapper.GetMappedFields<T>();
                 query.ViewXml = Camlex.Query().ViewFields(FieldsToLoad).ToString(true);
             }
 
-            var list = Mapper.GetListForSharepointItem<T>();
+            var list = mapper.GetListForSharepointItem<T>();
             var items = list.GetItems(query);
-            Context.Load(items);
-            Context.ExecuteQuery();
+            context.Load(items);
+            context.ExecuteQuery();
 
             List<T> result = new List<T>();
             foreach (ListItem item in items)
-                result.Add(Mapper.BuildEntityFromItem<T>(item));
+                result.Add(mapper.BuildEntityFromItem<T>(item));
 
             return result;
         }
@@ -79,12 +78,12 @@ namespace Shmapper
         /// </summary>
         public T GetById<T>(int Id) where T : ISharepointItem, new()
         {
-            var list = Mapper.GetListForSharepointItem<T>();
+            var list = mapper.GetListForSharepointItem<T>();
             var item = list.GetItemById(Id);
-            Context.Load(item);
-            Context.ExecuteQuery();
+            context.Load(item);
+            context.ExecuteQuery();
 
-            return Mapper.BuildEntityFromItem<T>(item);
+            return mapper.BuildEntityFromItem<T>(item);
         }
 
         /// <summary>
@@ -100,13 +99,13 @@ namespace Shmapper
         /// </summary>
         public void Update<T>(IEnumerable<T> Entities) where T : ISharepointItem
         {
-            var list = Mapper.GetListForSharepointItem<T>();
+            var list = mapper.GetListForSharepointItem<T>();
 
-            Context.Load(list.Fields);
-            Context.ExecuteQuery();
+            context.Load(list.Fields);
+            context.ExecuteQuery();
 
-            Mapper.UpdateItemsFromEntities(Entities, list);
-            Context.ExecuteQuery();
+            mapper.UpdateItemsFromEntities(Entities, list);
+            context.ExecuteQuery();
         }
 
         /// <summary>
@@ -122,14 +121,14 @@ namespace Shmapper
         /// </summary>
         public void Delete<T>(IEnumerable<T> Entities) where T : ISharepointItem
         {
-            var list = Mapper.GetListForSharepointItem<T>();
+            var list = mapper.GetListForSharepointItem<T>();
 
             foreach (var itemToDelete in Entities)
             {
                 var item = list.GetItemById(itemToDelete.Id);
                 item.DeleteObject();
             }
-            Context.ExecuteQuery();
+            context.ExecuteQuery();
         }
 
         /// <summary>
@@ -145,12 +144,17 @@ namespace Shmapper
         /// </summary>
         public void Insert<T>(IEnumerable<T> Entity) where T : ISharepointItem
         {
-            var list = Mapper.GetListForSharepointItem<T>();
-            Context.Load(list.Fields);
-            Context.ExecuteQuery();
+            var list = mapper.GetListForSharepointItem<T>();
+            context.Load(list.Fields);
+            context.ExecuteQuery();
 
-            Mapper.CreateItemsFromEntities(Entity, list);
-            Context.ExecuteQuery();
+            mapper.CreateItemsFromEntities(Entity, list);
+            context.ExecuteQuery();
+        }
+
+        public void Dispose()
+        {
+            context?.Dispose();
         }
     }
 }
