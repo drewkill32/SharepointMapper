@@ -1,5 +1,6 @@
 ﻿using Microsoft.SharePoint.Client;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -177,7 +178,8 @@ namespace Shmapper
                     else
                     {
                         Type TypeToConvert = GetUnderlyingType(objProperty);
-                        object settablePropertyValue = Convert.ChangeType(fieldValue, TypeToConvert);
+                        object settablePropertyValue = TypeToConvert.IsPrimitive ?
+                        Convert.ChangeType(fieldValue, TypeToConvert) : fieldValue;
                         objProperty.SetValue(obj, settablePropertyValue);
                     }
                 }
