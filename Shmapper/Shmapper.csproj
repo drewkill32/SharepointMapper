@@ -43,6 +43,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,7 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientContextExtensions.cs" />
+    <Compile Include="Extensions\ClientContextExtensions.cs" />
+    <Compile Include="Extensions\StringExtentsions.cs" />
     <Compile Include="ISharepointClientAsync.cs" />
     <Compile Include="ISharepointClient.cs" />
     <Compile Include="Mapping\InvalidMappingExeption.cs" />
